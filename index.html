@@ -32,31 +32,10 @@
       color: var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
       line-height: 1.6;
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
     }
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(8px);
-      background: color-mix(in oklab, var(--bg) 85%, transparent);
-      border-bottom: 1px solid var(--border);
-    }
-    .container {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 14px 16px;
-    }
-    h1 {
-      margin: 0;
-      font-size: clamp(1.05rem, 2.5vw + .6rem, 1.4rem);
-      letter-spacing: .02em;
-    }
-    main { padding: 16px; }
     .card {
       max-width: 860px;
-      margin: 14px auto;
+      margin: 20px auto;
       padding: clamp(14px, 2.5vw + 8px, 22px);
       border-radius: 14px;
       background: var(--card);
@@ -71,69 +50,22 @@
       color: var(--muted);
       margin-right: 8px;
     }
-    .value {
-      display: inline;
-      word-break: break-word;
-    }
     .quote {
       border-left: 3px solid var(--accent);
       padding-left: 10px;
       margin: 8px 0;
       font-size: clamp(1rem, 2.6vw + .6rem, 1.15rem);
     }
-    .toolbar {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 8px;
-    }
-    .btn {
-      appearance: none;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .btn:active { transform: translateY(1px); }
-    footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: .85rem;
-      padding: 24px 16px 36px;
-    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1>命を軽視した発言（ランダム1件）</h1>
-      <div class="toolbar">
-        <a class="btn" href="dehumanizing_quotes_no_original.json" download>JSON をダウンロード</a>
-        <button class="btn" id="shuffle">別の項目を表示</button>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <div id="card" class="card" aria-live="polite">
-      読み込み中です…
-    </div>
-  </main>
-
-  <footer>
-    GitHub Pages で動作します。<br />
-    同じ階層に <code>dehumanizing_quotes_no_original.json</code> を置いてください。
-  </footer>
+  <div id="card" class="card" aria-live="polite">
+    読み込み中です…
+  </div>
 
   <script>
     const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
     const $card = document.getElementById("card");
-    const $shuffle = document.getElementById("shuffle");
     let flat = [];
 
     function flattenCategories(data) {
@@ -146,16 +78,11 @@
 
     function renderOne(item) {
       $card.innerHTML = `
-        <div class="row"><span class="label">人物</span><span class="value">${item.speaker || "（不明）"}</span></div>
-        <div class="row quote"><span class="label">言葉</span><span class="value">${item.quote_jp || ""}</span></div>
-        <div class="row"><span class="label">批判</span><span class="value">${item.commentary || ""}</span></div>
-        <div class="row"><span class="label">出典</span><span class="value">${item.source || ""}</span></div>
+        <div class="row"><span class="label">人物</span>${item.speaker || "（不明）"}</div>
+        <div class="row quote"><span class="label">言葉</span>${item.quote_jp || ""}</div>
+        <div class="row"><span class="label">批判</span>${item.commentary || ""}</div>
+        <div class="row"><span class="label">出典</span>${item.source || ""}</div>
       `;
-    }
-
-    function showRandom() {
-      if (!flat.length) return;
-      renderOne(pick(flat));
     }
 
     async function init() {
@@ -164,14 +91,13 @@
         if (!res.ok) throw new Error("JSON 読み込みに失敗");
         const data = await res.json();
         flat = flattenCategories(data);
-        showRandom();
+        renderOne(pick(flat));
       } catch (e) {
-        $card.textContent = "JSON を読み込めませんでした。同じ階層に配置されているか確認してください。";
+        $card.textContent = "JSON を読み込めませんでした。";
         console.error(e);
       }
     }
 
-    $shuffle.addEventListener("click", showRandom);
     init();
   </script>
 </body>
