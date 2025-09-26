@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>命を軽視した発言・スローガン・出来事（統合版）ビューア</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --card: #10161d;
+      --text: #f1f5f9;
+      --muted: #93a4b1;
+      --accent: #48a6ff;
+      --chip: #19222c;
+      --border: #1e2a36;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #0b0f14 0%, #0e141b 100%);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.6;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+      background: rgba(11, 15, 20, 0.8);
+      border-bottom: 1px solid var(--border);
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 16px;
+    }
+    h1 { font-size: 1.35rem; margin: 0; }
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+      align-items: center;
+      margin-top: 12px;
+    }
+    input[type="search"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      outline: none;
+    }
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--chip);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform .04s ease, background .2s ease, border-color .2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      background: #1a2633;
+      border-color: #294760;
+    }
+    main { padding: 18px 16px 64px; }
+    .meta {
+      color: var(--muted);
+      font-size: .95rem;
+      margin-bottom: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 800px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+    section.category {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: radial-gradient(1200px 400px at 100% -100%, rgba(72,166,255,0.08), transparent 60%), var(--card);
+      overflow: hidden;
+    }
+    .category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .category-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .count {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      padding: 10px;
+      gap: 10px;
+    }
+    article.card {
+      border: 1px solid var(--border);
+      background: #0f141b;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .speaker {
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .quote {
+      font-size: 1rem;
+      margin: 6px 0 10px;
+      padding-left: 10px;
+      border-left: 3px solid #2b4156;
+    }
+    .context, .commentary, .source {
+      font-size: .95rem;
+      color: var(--muted);
+      margin: 6px 0;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      gap: 6px;
+      border-radius: 999px;
+      background: var(--chip);
+      border: 1px solid var(--border);
+      font-size: .8rem;
+      color: var(--muted);
+    }
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 24px 12px 48px;
+      border-top: 1px solid var(--border);
+      margin-top: 36px;
+    }
+    .hidden { display: none !important; }
+    .accent { color: var(--accent); }
+    .kicker { font-size: .9rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>命を軽視した発言・スローガン・出来事（統合版）ビューア</h1>
+      <div class="kicker">日本（政府・軍／報道・教育・文化）＋比較参照（国外）</div>
+      <div class="toolbar">
+        <input id="search" type="search" placeholder="スピーカー・和訳・文脈・出典でフィルタ…" />
+        <a id="downloadJson" class="btn" href="dehumanizing_quotes_no_original.json" download>JSON をダウンロード</a>
+        <button id="downloadView" class="btn">表示中データを保存</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="meta" class="meta">読み込み中…</div>
+    <div id="content" class="grid"></div>
+  </main>
+
+  <footer>
+    このページは GitHub Pages で静的に動作します。<br />
+    同じフォルダに <code>dehumanizing_quotes_no_original.json</code> を置いて公開してください。
+  </footer>
+
+  <script>
+    const state = {
+      raw: null,
+      filter: "",
+    };
+
+    const $content = document.getElementById("content");
+    const $meta = document.getElementById("meta");
+    const $search = document.getElementById("search");
+    const $downloadView = document.getElementById("downloadView");
+
+    async function loadJSON() {
+      try {
+        const res = await fetch("dehumanizing_quotes_no_original.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("JSON 読み込みに失敗しました");
+        const json = await res.json();
+        state.raw = json;
+        render();
+      } catch (e) {
+        $meta.textContent = "JSON の読み込みに失敗しました。ファイルを同じフォルダに置いてください。";
+        console.error(e);
+      }
+    }
+
+    function normalize(str) {
+      return (str || "").toString().toLowerCase();
+    }
+
+    function matchFilter(item, term) {
+      const hay = [
+        item.speaker,
+        item.quote_jp,
+        item.context,
+        item.commentary,
+        item.source
+      ].map(normalize).join(" ");
+      return hay.includes(term);
+    }
+
+    function render() {
+      const data = state.raw;
+      if (!data) return;
+
+      const term = normalize(state.filter);
+      const categories = data.categories || {};
+      let total = 0;
+
+      $content.innerHTML = "";
+      Object.entries(categories).forEach(([catName, items]) => {
+        const filtered = term ? items.filter(it => matchFilter(it, term)) : items;
+        total += filtered.length;
+
+        const section = document.createElement("section");
+        section.className = "category";
+
+        section.innerHTML = `
+          <div class="category-header">
+            <div class="category-title">${catName}</div>
+            <div class="count">${filtered.length} 件</div>
+          </div>
+          <div class="cards"></div>
+        `;
+
+        const cards = section.querySelector(".cards");
+        filtered.forEach(item => {
+          const el = document.createElement("article");
+          el.className = "card";
+          el.innerHTML = `
+            <div class="speaker">${item.speaker || "（不明）"}</div>
+            <div class="quote">${item.quote_jp || ""}</div>
+            <div class="context"><span class="chip">文脈</span> ${item.context || ""}</div>
+            <div class="commentary"><span class="chip">批判</span> ${item.commentary || ""}</div>
+            <div class="source"><span class="chip">出典</span> ${item.source || ""}</div>
+          `;
+          cards.appendChild(el);
+        });
+
+        if (filtered.length > 0) {
+          $content.appendChild(section);
+        }
+      });
+
+      const totalAll = Object.values(categories).reduce((acc, arr) => acc + arr.length, 0);
+      const theme = state.raw.theme || "データ";
+      $meta.innerHTML = `<span class="accent">${theme}</span> — 総数 ${totalAll} 件 / 表示 ${total} 件`;
+    }
+
+    $search.addEventListener("input", (e) => {
+      state.filter = e.target.value;
+      render();
+    });
+
+    $downloadView.addEventListener("click", () => {
+      if (!state.raw) return;
+      const blob = new Blob([JSON.stringify(state.raw, null, 2)], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "dehumanizing_quotes_filtered.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    loadJSON();
+  </script>
+</body>
+</html>
