@@ -1,178 +1,109 @@
-<!doctype html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>命を軽視した発言（ランダム1件）</title>
-  <meta name="color-scheme" content="dark light">
-  <style>
-    :root {
-      --bg: #0b0f14;
-      --card: #10161d;
-      --text: #f1f5f9;
-      --muted: #93a4b1;
-      --accent: #48a6ff;
-      --border: #1e2a36;
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f7fafc;
-        --card: #ffffff;
-        --text: #0f1720;
-        --muted: #4a5568;
-        --accent: #2563eb;
-        --border: #e2e8f0;
+{
+  "theme": "命を軽視した発言・スローガン・出来事（統合版）",
+  "categories": {
+    "日本 - 政府・軍": [
+      {
+        "speaker": "大西瀧治郎（海軍中将）",
+        "quote_jp": "国民全体が2000万の犠牲を覚悟するならば、勝利は我々のものとなるはずだ。",
+        "context": "特攻推進の中での発言。",
+        "commentary": "国民を数値化して犠牲を合理化した典型。命を資源と見なす発想。",
+        "source": "戦史資料・回想録"
+      },
+      {
+        "speaker": "戦陣訓（陸軍省, 1941）",
+        "quote_jp": "生きて虜囚の辱めを受けず。",
+        "context": "兵士の行動規範として示された。",
+        "commentary": "捕虜になるなら死ねという命令。兵士の命を自決で消耗させる思想。",
+        "source": "陸軍省『戦陣訓』1941"
+      },
+      {
+        "speaker": "大本営スローガン",
+        "quote_jp": "一億玉砕。",
+        "context": "敗戦濃厚期に国民を総動員するスローガン。",
+        "commentary": "国民全員の死を前提に戦争継続を正当化。命を『玉砕』と美化。",
+        "source": "大本営声明, 1944–45"
+      },
+      {
+        "speaker": "教育勅語（1890）",
+        "quote_jp": "一旦緩急あれば義勇公に奉じ、以て皇運を扶翼すべし。",
+        "context": "学校教育の根本文書。",
+        "commentary": "国家のために命を捧げることを幼少期から教育に組み込んだ。",
+        "source": "教育勅語（1890）"
       }
-    }
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      line-height: 1.6;
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-    }
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(8px);
-      background: color-mix(in oklab, var(--bg) 85%, transparent);
-      border-bottom: 1px solid var(--border);
-    }
-    .container {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 14px 16px;
-    }
-    h1 {
-      margin: 0;
-      font-size: clamp(1.05rem, 2.5vw + .6rem, 1.4rem);
-      letter-spacing: .02em;
-    }
-    main { padding: 16px; }
-    .card {
-      max-width: 860px;
-      margin: 14px auto;
-      padding: clamp(14px, 2.5vw + 8px, 22px);
-      border-radius: 14px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 16px rgba(0,0,0,.12);
-    }
-    .row { margin: 10px 0; }
-    .label {
-      display: inline-block;
-      min-width: 4.5em;
-      font-weight: 700;
-      color: var(--muted);
-      margin-right: 8px;
-    }
-    .value {
-      display: inline;
-      word-break: break-word;
-    }
-    .quote {
-      border-left: 3px solid var(--accent);
-      padding-left: 10px;
-      margin: 8px 0;
-      font-size: clamp(1rem, 2.6vw + .6rem, 1.15rem);
-    }
-    .toolbar {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 8px;
-    }
-    .btn {
-      appearance: none;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .btn:active { transform: translateY(1px); }
-    footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: .85rem;
-      padding: 24px 16px 36px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="container">
-      <h1>命を軽視した発言（ランダム1件）</h1>
-      <div class="toolbar">
-        <a class="btn" href="dehumanizing_quotes_no_original.json" download>JSON をダウンロード</a>
-        <button class="btn" id="shuffle">別の項目を表示</button>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <div id="card" class="card" aria-live="polite">
-      読み込み中です…
-    </div>
-  </main>
-
-  <footer>
-    GitHub Pages で動作します。<br />
-    同じ階層に <code>dehumanizing_quotes_no_original.json</code> を置いてください。
-  </footer>
-
-  <script>
-    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-    const $card = document.getElementById("card");
-    const $shuffle = document.getElementById("shuffle");
-    let flat = [];
-
-    function flattenCategories(data) {
-      const out = [];
-      for (const items of Object.values(data.categories || {})) {
-        for (const it of items) out.push(it);
+    ],
+    "日本 - 報道・教育・文化": [
+      {
+        "speaker": "朝日新聞（社説, 1944）",
+        "quote_jp": "降伏するよりは玉砕を。これが大和魂の標語である。",
+        "context": "サイパン玉砕報道。",
+        "commentary": "敗北を美化し、死を国民的美徳とした。",
+        "source": "朝日新聞1944年7月"
+      },
+      {
+        "speaker": "NHKラジオ放送（戦時標語）",
+        "quote_jp": "日本人は男女も子どもも最後の一人まで戦わねばならぬ。",
+        "context": "終戦間際の放送。",
+        "commentary": "民間人や子供まで死に動員する思想を報道が拡散。",
+        "source": "NHK戦時放送資料"
+      },
+      {
+        "speaker": "国民学校教科書（修身科, 1941版）",
+        "quote_jp": "臣民の最高の名誉は天皇のために死することなり。",
+        "context": "戦時改訂教科書の内容。",
+        "commentary": "子供に命を国家に捧げる価値観を教育で刷り込んだ。",
+        "source": "『初等科修身』1941"
+      },
+      {
+        "speaker": "婦人会スローガン",
+        "quote_jp": "母よ、笑顔で息子を戦場に送り出せ。",
+        "context": "地域組織の掛け声。",
+        "commentary": "母の感情より国家奉仕を優先。家庭まで命の供出を義務化。",
+        "source": "婦人会史料"
+      },
+      {
+        "speaker": "戦時歌謡『同期の桜』（1941）",
+        "quote_jp": "散るならば共に散らん、桜花のごとく。",
+        "context": "特攻隊員らに広く歌われた。",
+        "commentary": "命を桜の花にたとえ、美化して死を受け入れさせた。",
+        "source": "『同期の桜』歌詞"
+      },
+      {
+        "speaker": "学徒出陣壮行会（1943）",
+        "quote_jp": "学業は終わった、今こそ国家のために死すべし。",
+        "context": "学生を前線へ送る際の訓示。",
+        "commentary": "若者の命を教育ではなく戦死で消費する国家の論理。",
+        "source": "学徒出陣式典記録"
       }
-      return out;
-    }
-
-    function renderOne(item) {
-      $card.innerHTML = `
-        <div class="row"><span class="label">人物</span><span class="value">${item.speaker || "（不明）"}</span></div>
-        <div class="row quote"><span class="label">言葉</span><span class="value">${item.quote_jp || ""}</span></div>
-        <div class="row"><span class="label">批判</span><span class="value">${item.commentary || ""}</span></div>
-        <div class="row"><span class="label">出典</span><span class="value">${item.source || ""}</span></div>
-      `;
-    }
-
-    function showRandom() {
-      if (!flat.length) return;
-      renderOne(pick(flat));
-    }
-
-    async function init() {
-      try {
-        const res = await fetch("dehumanizing_quotes_no_original.json", { cache: "no-store" });
-        if (!res.ok) throw new Error("JSON 読み込みに失敗");
-        const data = await res.json();
-        flat = flattenCategories(data);
-        showRandom();
-      } catch (e) {
-        $card.textContent = "JSON を読み込めませんでした。同じ階層に配置されているか確認してください。";
-        console.error(e);
+    ],
+    "国外 - 全体主義的リーダー発言": [
+      {
+        "speaker": "スターリン",
+        "quote_jp": "一人の死は悲劇だが、百万の死は統計に過ぎない。",
+        "context": "帰属不確実だが広く伝わる言葉。",
+        "commentary": "個人の命を無視し、大量死を冷酷に扱う態度を象徴。",
+        "source": "二次文献で流布"
+      },
+      {
+        "speaker": "ポル・ポト（クメール・ルージュ）",
+        "quote_jp": "残しても利益はなく、滅ぼしても損はない。",
+        "context": "虐殺を象徴する言葉。",
+        "commentary": "人間を価値ゼロとする思想を体現。命の徹底的軽視。",
+        "source": "被害者証言・研究書"
+      },
+      {
+        "speaker": "毛沢東",
+        "quote_jp": "中国の半分が死ぬことになろうとも、革命は成功しなければならない。",
+        "context": "政策遂行を優先した発言と伝承。",
+        "commentary": "人口を犠牲にしてもよいとする極端な人命軽視の思想。",
+        "source": "二次資料引用"
+      },
+      {
+        "speaker": "ヒトラー",
+        "quote_jp": "ドイツ民族が強くないなら滅びるに値する。",
+        "context": "敗戦期の発言。",
+        "commentary": "国民の生存を条件付きで評価し、敗北＝民族死と結びつけた。",
+        "source": "演説・記録"
       }
-    }
-
-    $shuffle.addEventListener("click", showRandom);
-    init();
-  </script>
-</body>
-</html>
+    ]
+  }
+}
